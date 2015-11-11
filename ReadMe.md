@@ -6,8 +6,8 @@ A repository to contain the front-end assets and instructions for how to utilize
 
 You must have:
 
-* git
-* a current version of Node or io.js (with npm package manager)
+* [git](http://git-scm.com/)
+* a current version of [Node](https://nodejs.org/en/) <s>or [io.js](https://iojs.org/en/)</s> (with npm package manager) *note: io.js merged with Node again (ca. June 2015), so probably skip io.js
 * Internet access
 
 Run `npm install` which will install some npm dependencies (including `json-server`, then run `bower install`, which will install the front-end libraries needed. Lastly, you need to symlink a `public/` path to the `NSF/WebContent/` directory.
