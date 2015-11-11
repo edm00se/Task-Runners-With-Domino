@@ -14,7 +14,7 @@ Run `npm install` which will install some npm dependencies (including `json-serv
 
 * for *nix and Mac operating systems, the command is `ln -s NSF/WebContent/ public`
 * for Windows, you'll need to start up the command prompt (from the Start/search, "cmd", right-click and select "run as administrator")
-  * change directory to the root of the working git repository we set up, then run `mklink /d public NSF\WebContent`
+    * change directory to the root of the working git repository we set up, then run `mklink /d public NSF\WebContent`
 * don't worry about duplicate data, these are both methods for a symbolic link, meaning it's the same file, with multiple path pointers (and the `.gitignore` file is set up to ignore the public path, so we won't pollute our repository with duplicates)
 
 ## Usage
