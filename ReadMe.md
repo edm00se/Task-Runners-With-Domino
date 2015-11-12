@@ -10,7 +10,7 @@ You must have:
 * a current version of [Node](https://nodejs.org/en/) ~~or [io.js](https://iojs.org/en/)~~ (with npm package manager) *note: [io.js merged with Node](http://www.linuxfoundation.org/news-media/announcements/2015/06/nodejs-foundation-advances-community-collaboration-announces-new) again (ca. June 2015), so probably skip io.js
 * Internet access
 
-Run `npm install` which will install some npm dependencies (including `json-server`, then run `bower install`, which will install the front-end libraries needed. Lastly, you need to symlink a `public/` path to the `NSF/WebContent/` directory.
+First, clone this repository, then run `npm install` which will install some npm dependencies (including `json-server`, then run `bower install`, which will install the front-end libraries needed. Lastly, you need to symlink a `public/` path to the `NSF/WebContent/` directory.
 
 * for *nix and Mac operating systems, the command is `ln -s NSF/WebContent/ public`
 * for Windows, you'll need to start up the command prompt (from the Start/search, "cmd", right-click and select "run as administrator")
