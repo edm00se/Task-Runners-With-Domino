@@ -19,7 +19,9 @@ First, clone this repository, then run `npm install` which will install some npm
 
 ## Usage
 
-Read up on the blog series on task runners on Domino on [edm00se.io](https://edm00se.io) or try running `npm start` for the original front-end application with back-end mock. Then t
+Read up on the blog series on task runners on Domino on [edm00se.io](https://edm00se.io) or try running `npm start` for the original front-end application with back-end mock.
+
+You can check out the other task available via Grunt or gulp by running `grunt` or `gulp`, respectively.
 
 ## IBM Connect 2016
 
