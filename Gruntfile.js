@@ -10,14 +10,10 @@ module.exports = function(grunt) {
     // configure plugin with information, sample here is jshint, which doesn't like my code
     jshint: {
       options: {
-        reporter: require('jshint-stylish')
-      },
-      ignore_warning: {
-        options: {
-          '-W033': true, // mising semicolon
-          '-W041': true // use 'x' to compare with 'y'
-        },
-        src: ['NSF/WebContent/js/*.js'],
+        reporter: require('jshint-stylish'),
+        '-W033': true, // mising semicolon
+        '-W041': true, // use 'x' to compare with 'y'
+        '-W004': true // x already in use
       },
       all: ['Grunfile.js', 'NSF/WebContent/js/*.js']
     },
