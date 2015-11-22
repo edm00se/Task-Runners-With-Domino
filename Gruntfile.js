@@ -13,7 +13,8 @@ module.exports = function(grunt) {
         reporter: require('jshint-stylish'),
         '-W033': true, // mising semicolon
         '-W041': true, // use 'x' to compare with 'y'
-        '-W004': true // x already in use
+        '-W004': true, // x already in use
+        '-W014': true // bad line breaking before '||'
       },
       all: ['Grunfile.js', 'NSF/WebContent/js/*.js']
     },
@@ -42,6 +43,26 @@ module.exports = function(grunt) {
       }
     },
 
+    // configure htmlmin to remove comments and whitespace or more for dev vs dist
+    htmlmin: {
+      build: {
+        options: {
+          removeComments: true,
+          collapseWhitespace: true,
+          collapseBooleanAttributes: true,
+          removeAttributeQuotes: true,
+          removeEmptyAttributes: true,
+          removeRedundantAttributes: true
+        },
+        files: [{
+          expand: true,
+          cwd: 'NSF/WebContent/partials',
+          src: '{,*/}*.html',
+          dest: 'NSF/WebContent/dist/views'
+        }]
+       }
+    },
+
     // configure watch to auto update ------------------------------------------
     watch: {
       stylesheets: {
@@ -51,6 +72,10 @@ module.exports = function(grunt) {
       scripts: {
         files: 'NSF/WebContent/js/*.js',
         tasks: ['jshint', 'uglify']
+      },
+      partials: {
+        files: 'NSF/WebContent/partials/*.html',
+        tasks: ['htmlmin']
       }
     },
 
@@ -61,6 +86,22 @@ module.exports = function(grunt) {
       serve: {
         exec: 'json-server --id unid db.json --watch --routes routes.json'
       }
+    },
+
+    browserSync: {
+      dev: {
+          bsFiles: {
+              src : [
+                      'NSF/WebContent/css/*.css',
+                      'NSF/WebContent/js/*.js',
+                      'NSF/WebContent/partials/*.html'
+                    ]
+          },
+          options: {
+              watchTask: true,
+              proxy: 'http://localhost:3000/'
+          }
+      }
     }
 
   });
@@ -69,10 +110,13 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-contrib-cssmin');
+  grunt.loadNpmTasks('grunt-contrib-htmlmin');
+  grunt.loadNpmTasks('grunt-contrib-imagemin');
   grunt.loadNpmTasks('grunt-contrib-watch');
+  grunt.loadNpmTasks('grunt-browser-sync');
   grunt.loadNpmTasks('grunt-run');
 
   // CREATE TASKS
-  grunt.registerTask('default', ['jshint','uglify','cssmin','run:serve']);
+  grunt.registerTask('default', ['jshint','uglify','cssmin','htmlmin','run:serve','browserSync']);
 
 };

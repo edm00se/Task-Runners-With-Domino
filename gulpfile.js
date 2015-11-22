@@ -26,7 +26,12 @@ var gulp      = require('gulp'),
 // configure the jshint task
 gulp.task('jshint', function() {
   return gulp.src('./NSF/WebContent/js/*.js')
-    .pipe(jshint())
+    .pipe(jshint({
+      '-W033': true, // mising semicolon
+      '-W041': true, // use 'x' to compare with 'y'
+      '-W004': true, // x already in use
+      '-W014': true // bad line breaking before '||'
+    }))
     .pipe(jshint.reporter('jshint-stylish'));
 });
 
@@ -67,7 +72,7 @@ gulp.task('minify-html', function(){
 
 // configure which files to watch and what tasks to use on file changes
 gulp.task('watch', function() {
-  gulp.watch('./NSF/WebContent/js/*.js', ['jshint']);
+  gulp.watch('./NSF/WebContent/js/*.js', ['jshint','browser-sync-reload']);
   gulp.watch(['db.json'], function(){
     server.reload();
   });
@@ -80,11 +85,21 @@ gulp.task('serverStart', function(){
   server.start();
 });
 
+// reload the json-server instance, and its assets
+gulp.task('serverReload', function(){
+  server.reload();
+});
+
 // loading browser-sync as a proxy, must load after json-server
 gulp.task('browser-sync', function() {
     browserSync.init({
         proxy: "http://localhost:3000/"
     });
+});
+
+// reload browserSync
+gulp.task('browser-sync-reload', function(){
+  browserSync.reload();
 });
 
 // generic build, assuming we don't want the preview
