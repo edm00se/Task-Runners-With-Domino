@@ -93,7 +93,12 @@ gulp.task('serverReload', function(){
 // loading browser-sync as a proxy, must load after json-server
 gulp.task('browser-sync', function() {
     browserSync.init({
-        proxy: "http://localhost:3000/"
+        proxy: "http://localhost:3000/",
+        ui: {
+          weinre: {
+              port: 9090
+          }
+      }
     });
 });
 
