@@ -25,7 +25,7 @@ var gulp      = require('gulp'),
 
 // configure the jshint task
 gulp.task('jshint', function() {
-  return gulp.src('./NSF/WebContent/js/*.js')
+  return gulp.src(['./NSF/WebContent/js/*.js'])
     .pipe(jshint({
       '-W033': true, // mising semicolon
       '-W041': true, // use 'x' to compare with 'y'
@@ -47,7 +47,7 @@ gulp.task('build-js', function() {
 });
 
 gulp.task('cssmin', function(){
-  gulp.src('./NSF/WebContent/css/*.css')
+  gulp.src(['./NSF/WebContent/css/*.css'])
     .pipe(minify({ keepBreaks: false }))
     /*
     // builds individually minified files
@@ -73,22 +73,16 @@ gulp.task('minify-html', function(){
 // configure which files to watch and what tasks to use on file changes
 gulp.task('watch', function() {
   gulp.watch('./NSF/WebContent/js/*.js', ['jshint','browser-sync-reload']);
-  gulp.watch(['db.json'], function(){
-    server.reload();
-  });
+  gulp.watch(['db.json'], function(){ server.reload(); });
   gulp.watch('./NSF/WebContent/css/*.css', ['cssmin']);
   gulp.watch('./NSF/WebContent/partials/*.html', ['minify-html'])
 });
 
 // starts the json-server instance
-gulp.task('serverStart', function(){
-  server.start();
-});
+gulp.task('serverStart', function(){ server.start(); });
 
 // reload the json-server instance, and its assets
-gulp.task('serverReload', function(){
-  server.reload();
-});
+gulp.task('serverReload', function(){ server.reload(); });
 
 // loading browser-sync as a proxy, must load after json-server
 gulp.task('browser-sync', function() {
@@ -103,9 +97,7 @@ gulp.task('browser-sync', function() {
 });
 
 // reload browserSync
-gulp.task('browser-sync-reload', function(){
-  browserSync.reload();
-});
+gulp.task('browser-sync-reload', function(){ browserSync.reload(); });
 
 // generic build, assuming we don't want the preview
 gulp.task('build', ['jshint', 'build-js', 'cssmin', 'minify-html']);

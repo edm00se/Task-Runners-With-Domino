@@ -79,6 +79,7 @@ module.exports = function(grunt) {
       }
     },
 
+    /*
     run: {
       options: {
         // Task-specific options go here.
@@ -87,6 +88,7 @@ module.exports = function(grunt) {
         exec: 'json-server --id unid db.json --watch --routes routes.json'
       }
     },
+    */
 
     browserSync: {
       dev: {
@@ -99,7 +101,7 @@ module.exports = function(grunt) {
           },
           options: {
               watchTask: true,
-              proxy: 'http://localhost:3000/'
+              proxy: 'localhost:3000'
           }
       }
     }
@@ -114,9 +116,9 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-imagemin');
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-browser-sync');
-  grunt.loadNpmTasks('grunt-run');
+  //grunt.loadNpmTasks('grunt-run');
 
   // CREATE TASKS
-  grunt.registerTask('default', ['jshint','uglify','cssmin','htmlmin','run:serve','browserSync']);
+  grunt.registerTask('default', ['jshint','uglify','cssmin','htmlmin','browserSync','watch']);
 
 };
