@@ -10,6 +10,7 @@ var gulp      = require('gulp'),
   minify      = require('gulp-minify-css'),
   rename      = require('gulp-rename'),
   minifyHTML  = require('gulp-minify-html'),
+  inject      = require('gulp-inject'),
   server      = jsonServer.start({  // config the json-server instance
           data: 'db.json',
           id: 'unid',
@@ -68,6 +69,16 @@ gulp.task('minify-html', function(){
   return gulp.src('./NSF/WebContent/partials/*.html')
     .pipe(minifyHTML(opts))
     .pipe(gulp.dest('./public/dist'));
+});
+
+gulp.task('index', function(){
+  var tpl_src = [
+                  './NSF/WebContent/js/*.js',
+                  './NSF/WebContent/css/*.css'
+                ];
+  return gulp.src('./NSF/WebContent/index.html')
+    .pipe(inject(gulp.src(tpl_src), {ignorePath: 'dist'}))
+    .pipe(gulp.dest('./dist'));
 });
 
 // configure which files to watch and what tasks to use on file changes
