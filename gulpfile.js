@@ -11,6 +11,7 @@ var gulp      = require('gulp'),
   rename      = require('gulp-rename'),
   minifyHTML  = require('gulp-minify-html'),
   inject      = require('gulp-inject'),
+  del         = require('del'),
   server      = jsonServer.start({  // config the json-server instance
           data: 'db.json',
           id: 'unid',
@@ -26,7 +27,7 @@ var gulp      = require('gulp'),
 
 // configure the jshint task
 gulp.task('jshint', function() {
-  return gulp.src(['./NSF/WebContent/js/*.js'])
+  return gulp.src(['./src/js/*.js'])
     .pipe(jshint({
       '-W033': true, // mising semicolon
       '-W041': true, // use 'x' to compare with 'y'
@@ -38,17 +39,17 @@ gulp.task('jshint', function() {
 
 // build dist JS assets
 gulp.task('build-js', function() {
-  return gulp.src('./NSF/WebContent/js/*.js')
+  return gulp.src('./src/js/*.js')
     .pipe(sourcemaps.init())
-    .pipe(concat('scripts_from_gulp.js'))
+    .pipe(concat('scripts.js'))
     //only uglify if gulp is ran with '--type production'
     .pipe(gutil.env.type === 'production' ? uglify() : gutil.noop()) 
     .pipe(sourcemaps.write())
-    .pipe(gulp.dest('./public/dist'));
+    .pipe(gulp.dest('./public'));
 });
 
 gulp.task('cssmin', function(){
-  gulp.src(['./NSF/WebContent/css/*.css'])
+  gulp.src(['./src/css/*.css'])
     .pipe(minify({ keepBreaks: false }))
     /*
     // builds individually minified files
@@ -57,36 +58,47 @@ gulp.task('cssmin', function(){
     }))
     */
     .pipe(concat('style.min.css')) // combines into single minified CSS file
-    .pipe(gulp.dest('public/dist'));
+    .pipe(gulp.dest('public'));
 });
 
-gulp.task('minify-html', function(){
+gulp.task('minify-html-partials', function(){
   var opts = {
     conditionals: true,
     spare: true
   };
 
-  return gulp.src('./NSF/WebContent/partials/*.html')
+  return gulp.src('./src/partials/*.html')
     .pipe(minifyHTML(opts))
-    .pipe(gulp.dest('./public/dist'));
+    .pipe(gulp.dest('./public/partials'));
 });
 
 gulp.task('index', function(){
   var tpl_src = [
-                  './NSF/WebContent/js/*.js',
-                  './NSF/WebContent/css/*.css'
+                  './public/css/styles.css',
+                  './public/js/scripts.js'
                 ];
-  return gulp.src('./NSF/WebContent/index.html')
-    .pipe(inject(gulp.src(tpl_src), {ignorePath: 'dist'}))
-    .pipe(gulp.dest('./dist'));
+  return gulp.src('./src/index.html')
+    .pipe(inject(gulp.src(tpl_src)))
+    .pipe(gulp.dest('./public'));
+});
+
+gulp.task('clean:public', function () {
+  return del([
+    './public/index.html',
+    './public/partials',
+    './public/scripts.js',
+    './public/style.min.css',
+    // we don't want to clean this file though so we negate the pattern
+    '!./public/WEB-INF'
+  ]);
 });
 
 // configure which files to watch and what tasks to use on file changes
 gulp.task('watch', function() {
-  gulp.watch('./NSF/WebContent/js/*.js', ['jshint','browser-sync-reload']);
+  gulp.watch('./src/js/*.js', ['jshint','browser-sync-reload']);
   gulp.watch(['db.json'], function(){ server.reload(); });
-  gulp.watch('./NSF/WebContent/css/*.css', ['cssmin']);
-  gulp.watch('./NSF/WebContent/partials/*.html', ['minify-html'])
+  gulp.watch('./src/css/*.css', ['cssmin']);
+  gulp.watch('./src/partials/*.html', ['minify-html'])
 });
 
 // starts the json-server instance
@@ -111,7 +123,7 @@ gulp.task('browser-sync', function() {
 gulp.task('browser-sync-reload', function(){ browserSync.reload(); });
 
 // generic build, assuming we don't want the preview
-gulp.task('build', ['jshint', 'build-js', 'cssmin', 'minify-html']);
+gulp.task('build', ['clean:public', 'minify-html-partials', 'cssmin', 'jshint', 'build-js', 'index']);
 
 // define the default task and add the watch task to it
-gulp.task('default', ['watch','serverStart','browser-sync']);
+gulp.task('default', ['build', 'watch','serverStart','browser-sync']);
