@@ -78,8 +78,8 @@ gulp.task('index', function(){
   var sources = gulp.src([
                   './public/*.css',
                   './public/*.js'
-                ], { ignorePath: 'public', read: false, relative: true });
-  return target.pipe(inject(sources))
+                ], { ignorePath: 'public', read: false });
+  return target.pipe(inject(sources, { ignorePath: 'public' }))
     .pipe(gulp.dest('./public'));
 });
 
