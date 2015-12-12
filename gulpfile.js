@@ -12,6 +12,7 @@ var gulp      = require('gulp'),
   minifyHTML  = require('gulp-minify-html'),
   inject      = require('gulp-inject'),
   del         = require('del'),
+  runSequence = require('run-sequence'),
   server      = jsonServer.start({  // config the json-server instance
           data: 'db.json',
           id: 'unid',
@@ -73,12 +74,12 @@ gulp.task('minify-html-partials', function(){
 });
 
 gulp.task('index', function(){
-  var tpl_src = [
-                  './public/css/styles.css',
-                  './public/js/scripts.js'
-                ];
-  return gulp.src('./src/index.html')
-    .pipe(inject(gulp.src(tpl_src)))
+  var target = gulp.src('./src/index.html');
+  var sources = gulp.src([
+                  './public/*.css',
+                  './public/*.js'
+                ], { ignorePath: 'public', read: false, relative: true });
+  return target.pipe(inject(sources))
     .pipe(gulp.dest('./public'));
 });
 
@@ -98,7 +99,7 @@ gulp.task('watch', function() {
   gulp.watch('./src/js/*.js', ['jshint','browser-sync-reload']);
   gulp.watch(['db.json'], function(){ server.reload(); });
   gulp.watch('./src/css/*.css', ['cssmin']);
-  gulp.watch('./src/partials/*.html', ['minify-html'])
+  gulp.watch('./src/partials/*.html', ['minify-html-partials'])
 });
 
 // starts the json-server instance
@@ -123,7 +124,15 @@ gulp.task('browser-sync', function() {
 gulp.task('browser-sync-reload', function(){ browserSync.reload(); });
 
 // generic build, assuming we don't want the preview
-gulp.task('build', ['clean:public', 'minify-html-partials', 'cssmin', 'jshint', 'build-js', 'index']);
+gulp.task('build', function(){
+  runSequence(
+    'clean:public',
+    'minify-html-partials',
+    'cssmin',
+    'jshint',
+    'build-js',
+    'index');
+});
 
 // define the default task and add the watch task to it
-gulp.task('default', ['build', 'watch','serverStart','browser-sync']);
+gulp.task('default', ['build', 'watch', 'serverStart','browser-sync']);

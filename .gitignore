@@ -3,4 +3,7 @@ NSF/WebContent/libs/*
 node_modules/*
 public
 dist
-
+ODP/WebContent/index.html
+ODP/WebContent/style.min.css
+ODP/WebContent/scripts.js
+ODP/WebContent/partials
