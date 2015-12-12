@@ -23,6 +23,29 @@ Read up on the blog series on task runners on Domino on [edm00se.io](https://edm
 
 You can check out the other task available via Grunt or gulp by running `grunt` or `gulp`, respectively.
 
+### Basic Project Layout
+The layout has the On Disk Project (ODP, freshly renamed to that in place of a directory called 'NSF', to eliminate confusion) and its respective WebContent/ directory inside of it, containing the production-ready (aka- 'dist', distribution, or built version of the source client-side assets), additionally a 'src' folder at the root to contain the source client-side assets, unmodified, with 'public' pointing at the `ODP/WebContent/` path to provide the built results as the preview in the local browser, in conjunction with `json-server` as implmemented in the `npm start` script or, ideally, the `gulp` tasks.
+
+```
+├── Gruntfile.js
+├── ODP
+│   └── WebContent
+├── ReadMe.md
+├── bower.json
+├── db.json
+├── gulpfile.js
+├── package.json
+├── public -> NSF/WebContent/
+├── routes.json
+└── src
+    ├── css
+    ├── index.html
+    ├── js
+    ├── libs
+    ├── partials
+    └── tags
+```
+
 ## IBM Connect 2016
 
 This content, along with much more, will be component to an application development session at IBM Connect 2016, [#1380: A Beard, An App, A Blender: One Developer's Take on Building Apps With Domino/XPages](https://www-950.ibm.com/events/global/connect/sessions/preview.html?sessionid=CBEM-1380).
