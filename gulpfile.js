@@ -27,6 +27,7 @@ var gulp        = require('gulp'),
           },
           deferredStart: true
         }),
+  compress      = require('compression'),
   browserSync   = require('browser-sync').create();
 
 // configure the jshint task
@@ -112,7 +113,10 @@ gulp.task('serverReload', function(){ server.reload(); });
 // loading browser-sync as a proxy, must load after json-server
 gulp.task('browser-sync', function() {
     browserSync.init({
-        proxy: "http://localhost:3000/",
+        proxy: {
+          target: "http://localhost:3000/",
+          middleware: [compress()]
+        },
         ui: {
           weinre: {
               port: 9090
