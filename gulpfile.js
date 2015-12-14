@@ -14,6 +14,7 @@ var gulp        = require('gulp'),
   del           = require('del'),
   runSequence   = require('run-sequence'),
   uglify        = require('gulp-uglify'),
+  ngAnnotate    = require('gulp-ng-annotate')
   server        = jsonServer.start({
           // config the json-server instance
           data: 'db.json',
@@ -44,11 +45,12 @@ gulp.task('jshint', function() {
 // build dist JS assets
 gulp.task('build-js', function() {
   return gulp.src('./src/js/*.js')
+    .pipe(ngAnnotate())
     .pipe(sourcemaps.init())
     .pipe(concat('scripts.js'))
     //only uglify if gulp is ran with '--type production'
     //.pipe(gutil.env.type === 'production' ? uglify() : gutil.noop())
-    //.pipe(uglify())
+    .pipe(uglify())
     //.on('error', notify.onError("Error: <%= error.message %>"))
     .pipe(sourcemaps.write())
     .pipe(gulp.dest('./public'));

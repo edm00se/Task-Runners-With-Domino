@@ -10,7 +10,7 @@
 
 	//ui-router config
 	.config(
-		function($stateProvider, $urlRouterProvider){
+		['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider){
 			
 			$urlRouterProvider.otherwise('/about');
 			
@@ -49,6 +49,6 @@
 					templateUrl: 'partials/character.html',
 					controller: 'OneCharacterCtrl'
 				});
-	});
+	}]);
 
 })();
