@@ -1,19 +1,21 @@
 /* File: gulpfile.js */
 
 // grab our packages
-var gulp      = require('gulp'),
-  gutil       = require('gulp-util'),
-  jshint      = require('gulp-jshint'),
-  concat      = require('gulp-concat'),
-  sourcemaps  = require('gulp-sourcemaps'),
-  jsonServer  = require('gulp-json-srv'),
-  minify      = require('gulp-minify-css'),
-  rename      = require('gulp-rename'),
-  minifyHTML  = require('gulp-minify-html'),
-  inject      = require('gulp-inject'),
-  del         = require('del'),
-  runSequence = require('run-sequence'),
-  server      = jsonServer.start({  // config the json-server instance
+var gulp        = require('gulp'),
+  gutil         = require('gulp-util'),
+  jshint        = require('gulp-jshint'),
+  concat        = require('gulp-concat'),
+  sourcemaps    = require('gulp-sourcemaps'),
+  jsonServer    = require('gulp-json-srv'),
+  minify        = require('gulp-minify-css'),
+  rename        = require('gulp-rename'),
+  minifyHTML    = require('gulp-minify-html'),
+  inject        = require('gulp-inject'),
+  del           = require('del'),
+  runSequence   = require('run-sequence'),
+  uglify        = require('gulp-uglify'),
+  server        = jsonServer.start({
+          // config the json-server instance
           data: 'db.json',
           id: 'unid',
           rewriteRules: {
@@ -30,6 +32,7 @@ var gulp      = require('gulp'),
 gulp.task('jshint', function() {
   return gulp.src(['./src/js/*.js'])
     .pipe(jshint({
+      // ideally I'll just clean this up, but leaving here for demonstrative purposes
       '-W033': true, // mising semicolon
       '-W041': true, // use 'x' to compare with 'y'
       '-W004': true, // x already in use
@@ -44,7 +47,9 @@ gulp.task('build-js', function() {
     .pipe(sourcemaps.init())
     .pipe(concat('scripts.js'))
     //only uglify if gulp is ran with '--type production'
-    .pipe(gutil.env.type === 'production' ? uglify() : gutil.noop()) 
+    //.pipe(gutil.env.type === 'production' ? uglify() : gutil.noop())
+    //.pipe(uglify())
+    //.on('error', notify.onError("Error: <%= error.message %>"))
     .pipe(sourcemaps.write())
     .pipe(gulp.dest('./public'));
 });
@@ -52,12 +57,6 @@ gulp.task('build-js', function() {
 gulp.task('cssmin', function(){
   gulp.src(['./src/css/*.css'])
     .pipe(minify({ keepBreaks: false }))
-    /*
-    // builds individually minified files
-    .pipe(rename({
-      suffix: '.min'
-    }))
-    */
     .pipe(concat('style.min.css')) // combines into single minified CSS file
     .pipe(gulp.dest('public'));
 });
@@ -83,7 +82,7 @@ gulp.task('index', function(){
     .pipe(gulp.dest('./public'));
 });
 
-gulp.task('clean:public', function () {
+gulp.task('clean', function () {
   return del([
     './public/index.html',
     './public/partials',
@@ -121,12 +120,14 @@ gulp.task('browser-sync', function() {
 });
 
 // reload browserSync
-gulp.task('browser-sync-reload', function(){ browserSync.reload(); });
+gulp.task('browser-sync-reload', function(){
+  browserSync.reload();
+});
 
 // generic build, assuming we don't want the preview
 gulp.task('build', function(){
   runSequence(
-    'clean:public',
+    'clean',
     'minify-html-partials',
     'cssmin',
     'jshint',
