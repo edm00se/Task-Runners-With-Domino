@@ -85,12 +85,18 @@ gulp.task('index', function(){
     .pipe(gulp.dest('./public'));
 });
 
+gulp.task('copyTags', function(){
+  gulp.src(['./src/tags/abilities.json'])
+    .pipe(gulp.dest('./public/tags'));
+});
+
 gulp.task('clean', function () {
   return del([
     './public/index.html',
     './public/partials',
     './public/scripts.js',
     './public/style.min.css',
+    './public/tags/abilities.json',
     // we don't want to clean this file though so we negate the pattern
     '!./public/WEB-INF'
   ]);
@@ -136,6 +142,7 @@ gulp.task('build', function(){
     'clean',
     'minify-html-partials',
     'cssmin',
+    'copyTags',
     'jshint',
     'build-js',
     'index');
