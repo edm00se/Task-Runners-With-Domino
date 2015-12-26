@@ -14,7 +14,8 @@ var gulp        = require('gulp'),
   del           = require('del'),
   runSequence   = require('run-sequence'),
   uglify        = require('gulp-uglify'),
-  ngAnnotate    = require('gulp-ng-annotate')
+  ngAnnotate    = require('gulp-ng-annotate'),
+  spawn         = require('child_process').spawn,
   server        = jsonServer.start({
           // config the json-server instance
           data: 'db.json',
@@ -32,7 +33,7 @@ var gulp        = require('gulp'),
 
 // configure the jshint task
 gulp.task('jshint', function() {
-  return gulp.src(['./src/js/*.js'])
+  return gulp.src(['./gulpfile.js','./src/js/*.js'])
     .pipe(jshint({
       // ideally I'll just clean this up, but leaving here for demonstrative purposes
       '-W033': true, // mising semicolon
@@ -104,10 +105,11 @@ gulp.task('clean', function () {
 
 // configure which files to watch and what tasks to use on file changes
 gulp.task('watch', function() {
-  gulp.watch('./src/js/*.js', ['jshint','browser-sync-reload']);
-  gulp.watch(['db.json'], function(){ server.reload(); });
-  gulp.watch('./src/css/*.css', ['cssmin']);
-  gulp.watch('./src/partials/*.html', ['minify-html-partials'])
+  gulp.watch('./gulpfile.js', ['auto-reload']);
+  gulp.watch('./src/js/*.js', ['build','browser-sync-reload']);
+  gulp.watch(['./db.json'], function(){ server.reload(); });
+  gulp.watch('./src/css/*.css', ['build','browser-sync-reload']);
+  gulp.watch('./src/partials/*.html', ['build','browser-sync-reload'])
 });
 
 // starts the json-server instance
@@ -146,6 +148,11 @@ gulp.task('build', function(){
     'jshint',
     'build-js',
     'index');
+});
+
+gulp.task('auto-reload', function(){
+  spawn('gulp', [], {stdio: 'inherit'});
+  process.exit();
 });
 
 // define the default task and add the watch task to it
