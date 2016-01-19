@@ -66,4 +66,4 @@ Considerable credit should go to:
 
 ## License
 
-As is my norm for my blog and my GitHub repositories, the work contained herein is licensed under a [Creative Commons Attribution 4.0 ShareAlike 4.0 International License](http://creativecommons.org/licenses/by-sa/4.0/). You may use, alter, and redistribute the code herein (with citation), while expecting no warranty for its use.
+As is my norm for my blog and my GitHub repositories, the work contained herein is licensed under [the MIT License (MIT)](http://choosealicense.com/licenses/mit). You may use, alter, and redistribute the code herein (with citation), while expecting no warranty for its use.
