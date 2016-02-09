@@ -12,7 +12,7 @@
     "url": "https://github.com/edm00se/Task-Runners-With-Domino"
   },
   "author": "edm00se",
-  "license": "CC-BY-SA-4.0",
+  "license": "MIT",
   "dependencies": {
     "bower": "^1.7.1",
     "json-server": "^0.8.7"
